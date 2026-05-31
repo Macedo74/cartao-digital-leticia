@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartão de Visitas Digital - André Lima </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e293b;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 350px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 25px;
+        }
+
+        /* O container pai */
+        .header-bg {
+            background: var(--secondary-color);
+            height: 110px;
+            margin-bottom: 60px;
+            position: relative;
+            /* Essencial para a foto se ancorar aqui */
+            width: 100%;
+        }
+
+        /* O segredo: a caixa que segura as logos */
+        .container-logos {
+            display: flex;
+            justify-content: space-between;
+            /* Uma para cada lado */
+            align-items: center;
+            /* Alinha elas verticalmente no topo */
+            padding: 12px 15px;
+            /* Respiro para não colarem na borda */
+        }
+
+        /* Estilo individual das logos */
+        .logo-topo {
+            width: auto;
+            filter: brightness(0) invert(1);
+            /* Deixa as logos brancas */
+        }
+
+        .logo-edesp {
+            height: 30px;
+            /* EDESP é mais quadrada, fica melhor menor */
+        }
+
+        .logo-governo {
+            height: 12px;
+            /* Governo SP é horizontal, pode ser maior */
+        }
+
+        /* Sua foto de perfil (não mexi na lógica, apenas garanti o z-index) */
+        .profile-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 5px solid var(--card-bg);
+            position: absolute;
+            bottom: -55px;
+            left: 50%;
+            transform: translateX(-50%);
+            object-fit: cover;
+            background: #eee;
+            z-index: 10;
+        }
+
+        h2 {
+            margin: 10px 0 5px;
+            color: var(--secondary-color);
+        }
+
+        .cargo {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .links-container {
+            padding: 0 25px;
+        }
+
+        .btn {
+            display: flex !important;
+            /* Força o comportamento de linha */
+            flex-direction: row;
+            /* Garante que é horizontal */
+            align-items: center;
+            /* Centraliza verticalmente */
+            justify-content: center;
+            /* Centraliza horizontalmente */
+            gap: 12px;
+            /* Espaço fixo entre ícone e texto */
+            padding: 14px 20px;
+            margin: 12px 0;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+            box-sizing: border-box;
+            /* Essencial para o padding não esticar o botão */
+        }
+
+        /* Isso garante que o ícone não mude de tamanho */
+        .btn i {
+            flex-shrink: 0;
+            font-size: 1.2em;
+            width: 24px;
+            text-align: center;
+        }
+
+        .btn-vcard {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-whatsapp {
+            background-color: #25d366;
+            color: white;
+        }
+
+        .btn-linkedin {
+            background-color: #0077b5;
+            color: white;
+        }
+
+        .btn-outline {
+            border: 1px solid #ddd;
+            color: var(--secondary-color);
+            background: white;
+        }
+
+        /* ESCONDER PAINEL DEMO POR PADRÃO */
+        .demo-panel {
+            display: none;
+            /* Mude para 'block' se quiser editar */
+            width: 90%;
+            max-width: 350px;
+            margin-top: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: left;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        #qrcode-container {
+            position: relative;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .qr-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: white;
+            padding: 2px;
+            border-radius: 4px;
+        }
+
+        .footer-text {
+            font-size: 0.8em;
+            color: #64748b;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="header-bg">
+            <div class="container-logos">
+                <img src="assets/logo_edesp_transparente.png" alt="Logo EDESP" class="logo-topo logo-edesp">
+                <img src="assets/logo_gov_transparente.png" alt="Governo SP" class="logo-topo logo-governo">
+            </div>
+
+            <img src="assets/andre.png" alt="Foto de Perfil" class="profile-img">
+        </div>
+
+        <h2>André Lima</h2>
+        <div class="cargo">Executivo Público</div>
+
+        <div class="links-container">
+            <button onclick="gerarVCard()" class="btn btn-vcard">
+                <i class="fas fa-user-plus"></i> Salvar Contato
+            </button>
+
+            <a href="https://wa.me/5511981351491" class="btn btn-whatsapp" target="_blank">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+
+            <a href="tel:+551127638271" class="btn btn-outline">
+                <i class="fas fa-phone"></i> Telefone Fixo
+            </a>
+
+            <a href="mailto:almlima@sp.gov.br" class="btn btn-outline">
+                <i class="fas fa-envelope"></i> E-mail
+            </a>
+
+            <div id="qrcode-container">
+                <div id="qrcode"></div>
+                <img src="assets/logo_edesp.png" alt="Logo QR" class="qr-logo">
+            </div>
+
+            <div class="footer-text">Escaneie para compartilhar</div>
+        </div>
+    </div>
+
+    <div class="demo-panel">
+        <h4 style="margin-top:0">Painel de Edição (Demo)</h4>
+        <input id="campo-nome" type="text" placeholder="Nome" value="André" style="width:100%; margin-bottom:5px;">
+        <input id="campo-sobrenome" type="text" placeholder="Sobrenome" value="Lima"
+            style="width:100%; margin-bottom:5px;">
+        <button onclick="renderizarQRCode()" class="btn btn-outline">Atualizar Tudo</button>
+    </div>
+
+    <script>
+        const dadosContato = {
+            nome: "André",
+            sobrenome: "Lima",
+            empresa: "Escola de Desenvolvimento Social - EDESP",
+            cargo: "Executivo Público",
+            celular: "+5511981351491",
+            fixo: "+551127638271",
+            email: "almlima@sp.gov.br",
+            site: "www.desenvolvimentosocial.sp.gov.br"
+        };
+
+        function gerarVCard() {
+            const nomeExibicao = `${dadosContato.nome} ${dadosContato.sobrenome}`;
+            let vcf = `BEGIN:VCARD\nVERSION:3.0\nFN:${nomeExibicao}\nN:${dadosContato.sobrenome};${dadosContato.nome};;;\nORG:${dadosContato.empresa}\nTITLE:${dadosContato.cargo}\nTEL;TYPE=CELL:${dadosContato.celular}\nTEL;TYPE=WORK:${dadosContato.fixo}\nEMAIL:${dadosContato.email}\nURL:${dadosContato.site}\nEND:VCARD`;
+
+            const blob = new Blob([vcf], { type: "text/vcard" });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "contato.vcf";
+            a.click();
+        }
+
+        function renderizarQRCode() {
+            const container = document.getElementById("qrcode");
+            container.innerHTML = "";
+            new QRCode(container, {
+                text: window.location.href,
+                width: 140,
+                height: 140,
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        window.onload = renderizarQRCode;
+    </script>
+</body>
+
+</html>
